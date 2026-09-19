@@ -1,6 +1,7 @@
 {
   "name": "get-me-a-chai",
   "version": "0.1.0",
+  "description": "A creator monetization platform where fans can buy a chai (donate) for their favourite creators. Built with Next.js, MongoDB, and Razorpay.",
   "private": true,
   "scripts": {
     "dev": "next dev",

@@ -1,167 +1,240 @@
-<<<<<<< HEAD
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-=======
-
 # Get Me A Chai ☕
 
-Get Me A Chai is a full-stack creator support platform built with Next.js and the MERN stack, allowing creators to receive donations directly from their supporters through Razorpay integration.
-
-The platform provides secure authentication, creator dashboards, donation tracking, analytics, and payment management features.
+**Get Me A Chai** is a full-stack creator monetization platform where fans and supporters can buy a "chai" (a small donation) for their favourite creators. Built with **Next.js 16**, **TypeScript**, **MongoDB**, and **Razorpay**, it provides a seamless, secure experience for both creators and their supporters.
 
 ---
 
-# Features
+## 🚀 How It Works
 
-## Authentication
+### For Creators
+1. **Sign up** using GitHub OAuth — no passwords needed.
+2. **Complete your profile** — set a bio, profile picture, cover image, and social links via the Dashboard.
+3. **Connect Razorpay** — paste your Razorpay Key ID and Secret in the Dashboard to start accepting payments.
+4. **Share your page** — every creator gets a unique public URL: `yoursite.com/your-username`.
+5. **Track earnings** — view real-time donation stats, history, and supporter messages on the Dashboard.
 
-* GitHub OAuth authentication using NextAuth
-* Secure user sessions and protected routes
-
-## Creator Profiles
-
-* Public creator pages for receiving support
-* Personalized creator information and donation links
-
-## Razorpay Integration
-
-* Secure Razorpay payment gateway integration
-* Payment signature verification for secure transactions
-* Payment receipt verification and tracking
-
-## Creator Dashboard
-
-* View recent donation activity
-* Track payment status (Pending / Completed / Failed)
-* Manage creator payment settings
-* Access public donation page directly
-
-## Analytics & Statistics
-
-* Total donations received
-* Number of supporters
-* Average donation amount
-* Largest donation received
-* Donation history and fundraising insights
-* MongoDB aggregation pipelines for analytics
+### For Supporters
+1. Visit any creator's public page (e.g. `yoursite.com/ayush`).
+2. Enter a donation amount (₹1 – ₹1,00,000) and an optional message.
+3. Complete the secure payment via Razorpay.
+4. The creator receives a notification and the payment appears in their Dashboard instantly.
 
 ---
 
-# Tech Stack
+## ✨ Features
 
-## Frontend
-
-* Next.js
-* React.js
-* Tailwind CSS
-
-## Backend
-
-* Node.js
-* Next.js API Routes
-
-## Database
-
-* MongoDB
-* Mongoose
-
-## Authentication
-
-* NextAuth.js
-* GitHub OAuth
-
-## Payments
-
-* Razorpay
+| Feature | Description |
+|---|---|
+| 🔐 GitHub OAuth | Passwordless login via NextAuth.js |
+| 👤 Creator Profiles | Public pages with bio, cover image & social links |
+| 💸 Razorpay Payments | Secure payment initiation and signature verification |
+| 📊 Dashboard Analytics | Total donations, supporter count, average & highest donation |
+| 📋 Payment History | Filter by status — Pending / Completed / Failed |
+| 🔍 Creator Search | Discover creators by name or username |
+| 🛡️ Input Validation | Server-side validated forms and actions |
+| 📱 Responsive UI | Mobile-first design with Tailwind CSS |
 
 ---
 
-# Installation
+## 🛠️ Tech Stack
 
-## Clone the repository
+### Frontend
+- **Next.js 16** (App Router)
+- **React 19**
+- **TypeScript**
+- **Tailwind CSS v4**
 
-```bash
-git clone https://github.com/YOUR_USERNAME/get-me-a-chai.git
+### Backend
+- **Next.js Server Actions** — type-safe, server-side logic
+- **Next.js API Routes** — Razorpay webhook/verification endpoint
+
+### Database
+- **MongoDB** (Atlas or local)
+- **Mongoose** — schema modelling with ObjectId references
+
+### Authentication
+- **NextAuth.js** — session management
+- **GitHub OAuth** — social sign-in
+
+### Payments
+- **Razorpay** — order creation, payment capture, and HMAC signature verification
+
+---
+
+## 📁 Project Structure
+
+```
+├── app/
+│   ├── api/
+│   │   ├── auth/[...nextauth]/     # NextAuth handler
+│   │   └── razorpay/               # Payment verification endpoint
+│   ├── models/
+│   │   ├── User.ts                 # User schema (profile, Razorpay creds, stats)
+│   │   └── Payment.ts              # Payment schema (amount, status, donor info)
+│   ├── db/
+│   │   └── connectDb.ts            # MongoDB connection utility
+│   ├── Dashboard/
+│   │   └── page.tsx                # Creator dashboard
+│   ├── [username]/
+│   │   └── page.js                 # Public creator donation page
+│   ├── login/
+│   │   └── page.jsx                # Login page
+│   └── layout.tsx                  # Root layout + metadata
+├── actions/
+│   └── useractions.ts              # Server actions (payments, profile, stats)
+├── components/
+│   ├── PaymentPage.js              # Donation form with Razorpay SDK
+│   ├── Navbar.jsx                  # Navigation bar
+│   ├── Footer.jsx                  # Footer
+│   └── SessionWrapper.jsx          # NextAuth session provider wrapper
+├── lib/
+│   └── validation.ts               # Centralised input validation utilities
+├── public/
+│   └── assets/                     # Static images
+├── .env.example                    # Environment variable template
+├── next.config.ts                  # Next.js configuration
+└── package.json
 ```
 
-## Navigate to project directory
+---
+
+## ⚙️ Getting Started
+
+### Prerequisites
+- Node.js 18+ (LTS recommended)
+- MongoDB instance (local or [MongoDB Atlas](https://www.mongodb.com/cloud/atlas))
+- [GitHub OAuth App](https://github.com/settings/developers)
+- [Razorpay merchant account](https://dashboard.razorpay.com)
+
+### Installation
 
 ```bash
+# 1. Clone the repo
+git clone https://github.com/yourusername/get-me-a-chai.git
 cd get-me-a-chai
-```
 
-## Install dependencies
-
-```bash
+# 2. Install dependencies
 npm install
+
+# 3. Set up environment variables
+cp .env.example .env.local
 ```
 
-## Create environment variables
-
-Create a `.env.local` file and add:
+Edit `.env.local`:
 
 ```env
-MONGODB_URI=your_mongodb_uri
-GITHUB_ID=your_github_client_id
-GITHUB_SECRET=your_github_client_secret
-NEXTAUTH_SECRET=your_nextauth_secret
-RAZORPAY_KEY_ID=your_razorpay_key
-RAZORPAY_KEY_SECRET=your_razorpay_secret
+# MongoDB
+MONGODB_URI=mongodb+srv://your-connection-string
+
+# NextAuth
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-32-char-secret   # openssl rand -base64 32
+
+# GitHub OAuth
+GITHUB_ID=your-github-app-id
+GITHUB_SECRET=your-github-app-secret
 ```
 
-## Run the development server
-
 ```bash
+# 4. Start the dev server
 npm run dev
 ```
 
----
-
-# Future Improvements
-
-* Email notifications
-* Creator subscription system
-* Enhanced analytics dashboard
-* Mobile responsiveness improvements
-* Admin dashboard
+Open [http://localhost:3000](http://localhost:3000).
 
 ---
 
-# Author
+## 🗄️ Database Schema
 
-Ayush Dabhade
->>>>>>> eb70a03a7eaa7b03c817114b5ebca967a18ea47d
+### User
+```typescript
+{
+  name, email (unique), username (unique),
+  profilePicture?, coverImage?, bio?,
+  razorpayId?, razorpaySecret?,
+  socialLinks?: { twitter?, instagram?, linkedin? },
+  totalDonations: number,
+  createdAt, updatedAt
+}
+```
+
+### Payment
+```typescript
+{
+  name,                        // donor's display name
+  toUser: ObjectId,            // reference to creator
+  toUsername: string,          // indexed for fast queries
+  orderId: string (unique),    // Razorpay order ID
+  paymentId?: string,          // Razorpay payment ID (on success)
+  message?: string,            // optional supporter note
+  amount: number,              // in paise (₹1 = 100 paise)
+  status: "pending" | "completed" | "failed",
+  createdAt, updatedAt
+}
+```
+
+---
+
+## 🔑 Key Server Actions (`actions/useractions.ts`)
+
+| Action | Description |
+|---|---|
+| `initiatePayment(amount, toUsername, form)` | Creates a Razorpay order and saves a pending payment record |
+| `verifyPayment(razorpay_order_id, razorpay_payment_id, razorpay_signature)` | Verifies HMAC signature and marks payment as completed |
+| `fetchUser(identifier)` | Fetch user by username or email |
+| `getDonationStats(username)` | Aggregated stats — total, count, average, max donations |
+| `fetchUserPayments(username, filters)` | Paginated, filterable payment history |
+| `updateProfile(formData, userIdentifier)` | Update bio, links, images, and Razorpay credentials |
+
+---
+
+## 🛡️ Security
+
+- **Razorpay signature verification** — payments confirmed only after HMAC-SHA256 check
+- **NextAuth.js sessions** — protected routes, no plaintext credentials
+- **Server-side validation** — all inputs sanitised before DB writes
+- **Environment secrets** — no sensitive data in client bundle
+
+---
+
+## 🚀 Deployment (Vercel)
+
+```bash
+npm install -g vercel
+vercel login
+vercel
+```
+
+Set these environment variables in your Vercel project settings:
+
+```
+MONGODB_URI
+NEXTAUTH_URL       # your production domain
+NEXTAUTH_SECRET
+GITHUB_ID
+GITHUB_SECRET
+NODE_ENV=production
+```
+
+---
+
+## 💡 Future Enhancements
+
+- [ ] Email notifications for new donations
+- [ ] Donation tiers and fundraising goals
+- [ ] Advanced analytics with charts
+- [ ] Recurring donations / subscriptions
+- [ ] Multiple payment gateway support
+- [ ] Creator reviews and ratings
+- [ ] Mobile app (React Native)
+
+---
+
+## 👨‍💻 Author
+
+**Ayush Dabhade**
+
+---
+
+*Built with ❤️ for creators everywhere.*
+

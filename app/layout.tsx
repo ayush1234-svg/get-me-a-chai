@@ -7,9 +7,11 @@ import SessionWrapper from "@/components/SessionWrapper";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Get me A Chai - Fund your projects with chai",
-  description: "This website is a crowdfunding platform for creators.",
+  title: "Get Me A Chai ☕ — Support Your Favourite Creators",
+  description:
+    "Get Me A Chai is a creator monetization platform where fans can buy a chai (make a small donation) to support their favourite creators. Creators get a personal page, Razorpay-powered payments, and a dashboard to track earnings and supporters.",
 };
+
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
