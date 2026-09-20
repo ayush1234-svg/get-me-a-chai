@@ -60,7 +60,6 @@ const UserSchema = new Schema<IUser>(
     razorpayId: {
       type: String,
       default: null,
-      lowercase: true,
       trim: true,
     },
     razorpaySecret: {

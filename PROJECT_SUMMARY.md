@@ -1,8 +1,8 @@
-# Get Me A Chai - Portfolio Project Summary
+# Get Me A Tea - Portfolio Project Summary
 
 ## 📌 Project Overview
 
-**Get Me A Chai** is a full-stack web application that enables creators to receive donations from their fans through a seamless Razorpay integration. This project demonstrates comprehensive full-stack development capabilities with modern technologies and best practices.
+**Get Me A Tea** is a full-stack web application that enables creators to receive donations from their fans through a seamless Razorpay integration. This project demonstrates comprehensive full-stack development capabilities with modern technologies and best practices.
 
 **Live Demo**: [Your deployed URL]  
 **GitHub Repository**: [Your GitHub URL]
@@ -165,8 +165,8 @@ Client Form → Server Action Validation
 
 ```bash
 # Clone and setup
-git clone https://github.com/yourusername/get-me-a-chai.git
-cd get-me-a-chai
+git clone https://github.com/yourusername/get-me-a-tea.git
+cd get-me-a-tea
 npm install
 
 # Configure environment

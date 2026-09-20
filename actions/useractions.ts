@@ -6,14 +6,29 @@ import User from "@/app/models/User";
 import connectDb from "@/app/db/connectDb";
 import type { IUser } from "@/app/models/User";
 import type { IPayment } from "@/app/models/Payment";
-import {
-  validateAmount,
-  validateRazorpayCredentials,
-  validateUsername,
-  validateProfileUpdate,
-  validateMessage,
-} from "@/lib/validation";
-import { decryptText, encryptText, hasEncryptionKey } from "@/lib/crypto";
+import { validateAmount, validateProfileUpdate, validateMessage } from "@/lib/validation";
+import { encryptText } from "@/lib/crypto";
+
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) return error.message;
+
+  if (typeof error === "object" && error !== null) {
+    const typedError = error as {
+      response?: { data?: { error?: { description?: string } } };
+      error?: { description?: string };
+      message?: string;
+    };
+
+    return (
+      typedError.response?.data?.error?.description ||
+      typedError.error?.description ||
+      typedError.message ||
+      "An unexpected error occurred"
+    );
+  }
+
+  return "An unexpected error occurred";
+};
 
 /**
  * Response types for server actions
@@ -29,6 +44,7 @@ export interface PaymentOrder {
   amount: number;
   currency: string;
   created_at: number;
+  keyId?: string;
 }
 
 /**
@@ -52,19 +68,20 @@ export const initiatePayment = async (
     }
 
     // Validate recipient exists
-    const user = await User.findOne({ username: toUsername?.toLowerCase().trim() })
-      .select("+razorpaySecret")
-      .lean();
+    const user = await User.findOne({ username: toUsername?.toLowerCase().trim() }).lean();
     if (!user) {
       return { success: false, error: "Recipient user not found" };
     }
 
-    const razorpaySecret = user.razorpaySecret ? decryptText(user.razorpaySecret) : undefined;
+    // Use platform Razorpay credentials from environment variables
+    const razorpayKeyId = (process.env.NEXT_PUBLIC_KEY_ID || process.env.KEY_ID)?.trim();
+    const razorpaySecret = process.env.KEY_SECRET?.trim();
 
-    // Validate Razorpay credentials
-    const credentialValidation = validateRazorpayCredentials(user.razorpayId, razorpaySecret);
-    if (!credentialValidation.isValid) {
-      return { success: false, error: credentialValidation.error };
+    if (!razorpayKeyId || !razorpaySecret) {
+      return {
+        success: false,
+        error: "Platform payment gateway is not configured. Please check environment variables.",
+      };
     }
 
     // Validate message
@@ -77,26 +94,31 @@ export const initiatePayment = async (
 
     // Create Razorpay instance with credentials
     const razorpayInstance = new Razorpay({
-      key_id: user.razorpayId!.trim(),
-      key_secret: razorpaySecret!.trim(),
+      key_id: razorpayKeyId,
+      key_secret: razorpaySecret,
     });
 
     // Create order
     let order: PaymentOrder;
     try {
-      order = await razorpayInstance.orders.create({
+      const createdOrder = await razorpayInstance.orders.create({
         amount: amountInRupees * 100,
         currency: "INR",
       });
-    } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.error?.description ||
-        error?.error?.description ||
-        error?.message ||
-        "Failed to create Razorpay order";
+      order = {
+        ...createdOrder,
+        keyId: razorpayKeyId,
+      } as PaymentOrder;
+    } catch (error: unknown) {
+      const typedError = error as {
+        response?: { data?: { error?: { description?: string } } };
+        error?: { description?: string };
+        statusCode?: number;
+      };
+      const errorMessage = getErrorMessage(error) || "Failed to create Razorpay order";
 
       console.error("Razorpay order creation failed:", {
-        statusCode: error?.statusCode,
+        statusCode: typedError?.statusCode,
         message: errorMessage,
         username: toUsername,
       });
@@ -142,6 +164,7 @@ export const fetchUser = async (identifier: string): Promise<ActionResponse<IUse
 
     // Convert to plain object to avoid serialization issues
     const plainUser = user ? JSON.parse(JSON.stringify(user)) : null;
+    if (plainUser) delete plainUser.razorpaySecret;
 
     return { success: true, data: plainUser };
   } catch (error) {
@@ -187,10 +210,12 @@ export const fetchUserPayments = async (
     await connectDb();
 
     const limit = Math.min(filters?.limit || 50, 100);
-    const query: any = { toUsername: username?.toLowerCase() };
+    const query: Record<string, string> = { toUsername: username?.toLowerCase() };
 
-    if (filters?.status) {
-      query.status = filters.status;
+    if (filters?.status === "all") {
+      // return all
+    } else {
+      query.status = filters?.status || "completed";
     }
 
     const payments = await Payment.find(query).sort({ createdAt: -1 }).limit(limit).lean();
@@ -330,16 +355,18 @@ export const updateProfile = async (
     }
 
     // Exclude _id and other immutable fields from update
-    const { _id, __v, createdAt, updatedAt, totalDonations, ...restData } = data as any;
+    const { _id, __v, createdAt, updatedAt, totalDonations, ...restData } = data as Record<string, unknown>;
+
+    const toString = (value: unknown): string => (typeof value === "string" ? value : "");
 
     const updateData: Partial<IUser> = {
-      name: (restData.name as string) || existingUser.name,
-      bio: (restData.bio as string) || existingUser.bio,
-      username: ((restData.username as string)?.toLowerCase() || existingUser.username) as string,
-      email: (restData.email as string) || existingUser.email,
-      profilePicture: (restData.profilePicture as string) || existingUser.profilePicture,
-      coverImage: (restData.coverImage as string) || existingUser.coverImage,
-      razorpayId: (restData.razorpayId as string) || existingUser.razorpayId,
+      name: toString(restData.name) || existingUser.name,
+      bio: toString(restData.bio) || existingUser.bio,
+      username: toString(restData.username).toLowerCase() || existingUser.username,
+      email: toString(restData.email) || existingUser.email,
+      profilePicture: toString(restData.profilePicture) || existingUser.profilePicture,
+      coverImage: toString(restData.coverImage) || existingUser.coverImage,
+      razorpayId: toString(restData.razorpayId) || existingUser.razorpayId,
       razorpaySecret: encryptedSecret,
     };
 

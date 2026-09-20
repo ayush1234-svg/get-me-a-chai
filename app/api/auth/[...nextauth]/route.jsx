@@ -4,10 +4,12 @@ import connectDb from '../../../db/connectDb'
 import User from '../../../models/User'
 
 const handler = NextAuth({
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
+      issuer: "https://github.com/login/oauth",
     })
   ],
   callbacks: {

@@ -1,7 +1,7 @@
 {
-  "name": "get-me-a-chai",
+  "name": "get-me-a-tea",
   "version": "0.1.0",
-  "description": "A creator monetization platform where fans can buy a chai (donate) for their favourite creators. Built with Next.js, MongoDB, and Razorpay.",
+  "description": "A creator monetization platform where fans can buy a tea (donate) for their favourite creators. Built with Next.js, MongoDB, and Razorpay.",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,9 +10,13 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "mongoose": "^9.4.1",
     "next": "16.2.2",
+    "next-auth": "^4.24.13",
+    "razorpay": "^2.9.6",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "react-toastify": "^11.0.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

@@ -7,73 +7,65 @@ import User from "@/app/models/User.js"
 
 
 export const initiatePayment = async (amount, to_user, paymentform) => {
-  await connectDb()
-
-  const amountInRupees = Number(amount)
-  if (!Number.isFinite(amountInRupees) || amountInRupees <= 0) {
-    throw new Error("Invalid payment amount")
-  }
-  const user = await User.findOne({ username: to_user }).lean()
-
-  if (!user) {
-    throw new Error("User not found")
-  }
-
-  const keyId = user.razorpayId?.trim()
-  const keySecret = user.razorpaySecret?.trim()
-
-  if (!keyId || !keySecret) {
-    throw new Error("Razorpay credentials are not configured on the server")
-  }
-
-  const instance = new Razorpay({
-    key_id: keyId,
-    key_secret: keySecret
-  })
-
-  let options = {
-    amount: amountInRupees * 100,
-    currency: "INR"
-  }
-
-  let order
   try {
-    order = await instance.orders.create(options)
-  } catch (error) {
-    const message =
-      error?.statusCode && error?.error?.description
-        ? `Razorpay ${error.statusCode}: ${error.error.description}`
-        : error?.error?.description ||
-          error?.description ||
-          error?.message ||
-          "Unable to create Razorpay order. Check Razorpay credentials and network access."
+    await connectDb()
 
-    console.error("Razorpay order creation failed", {
+    const amountInRupees = Number(amount)
+    if (!Number.isFinite(amountInRupees) || amountInRupees <= 0) {
+      return { success: false, error: "Invalid payment amount" }
+    }
+
+    const username = to_user?.toLowerCase().trim()
+    const user = await User.findOne({ username })
+      .select("+razorpaySecret")
+      .lean()
+
+    if (!user) {
+      return { success: false, error: "Recipient user not found" }
+    }
+
+    const keyId = (process.env.NEXT_PUBLIC_KEY_ID || process.env.KEY_ID)?.trim()
+    const keySecret = process.env.KEY_SECRET?.trim()
+
+    if (!keyId || !keySecret) {
+      return { success: false, error: "Razorpay credentials are not configured on the server" }
+    }
+
+    const instance = new Razorpay({
+      key_id: keyId,
+      key_secret: keySecret
+    })
+
+    const order = await instance.orders.create({
+      amount: amountInRupees * 100,
+      currency: "INR"
+    })
+
+    if (!order?.id) {
+      return { success: false, error: "Razorpay did not return a valid order" }
+    }
+
+    await Payment.create({
+      amount: amountInRupees,
+      toUser: user._id,
+      toUsername: username,
+      orderId: order.id,
+      message: paymentform?.message?.trim() || "",
+      name: paymentform?.name?.trim() || "Anonymous",
+      status: "pending"
+    })
+
+    return { success: true, data: { ...order, keyId } }
+  } catch (error) {
+    console.error("initiatePayment error", {
       statusCode: error?.statusCode,
       code: error?.error?.code,
       description: error?.error?.description,
       message: error?.message,
       username: to_user,
-      hasKeyId: Boolean(keyId),
-      hasKeySecret: Boolean(keySecret),
     })
-
-    throw new Error(message)
+    return { success: false, error: "Payment initialization failed. Please try again later." }
   }
-
-  if (!order?.id) {
-    throw new Error("Razorpay did not return a valid order")
-  }
-
-  await Payment.create({
-    amount: amountInRupees,
-    to_user: to_user,
-    oid: order.id,
-    message: paymentform?.message || "",
-    name: paymentform?.name || "Anonymous"
-  })
-
-  return order
 }
 
 export const fetchuser = async (username) => {

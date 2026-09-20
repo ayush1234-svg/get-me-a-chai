@@ -6,7 +6,7 @@ const connectDb = async (): Promise<void> => {
     return;
   }
 
-  const mongoUri = process.env.MONGODB_URI || "mongodb://localhost:27017/get-me-a-chai";
+  const mongoUri = process.env.MONGODB_URI || "mongodb://localhost:27017/tea";
 
   try {
     await mongoose.connect(mongoUri, {

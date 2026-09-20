@@ -1,9 +1,9 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "About | Get Me A Chai",
+  title: "About | Get Me A Tea",
   description:
-    "Learn how Get Me A Chai helps creators accept support, build momentum, and stay connected with their biggest supporters.",
+    "Learn how Get Me A Tea helps creators accept support, build momentum, and stay connected with their biggest supporters.",
 };
 
 const highlights = [
@@ -36,14 +36,14 @@ export default function Page() {
       <section className="grid gap-8 overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-cyan-950/20 backdrop-blur-sm md:grid-cols-[1.2fr_0.8fr] md:p-12">
         <div className="flex flex-col justify-center gap-6">
           <span className="w-fit rounded-full border border-cyan-300/30 bg-cyan-400/10 px-4 py-1 text-sm font-medium text-cyan-200">
-            About Get Me A Chai
+            About Get Me A Tea
           </span>
           <div className="space-y-4">
             <h1 className="text-4xl font-black tracking-tight text-white md:text-6xl">
               A simple way for fans to fuel the work they love.
             </h1>
             <p className="max-w-2xl text-base leading-7 text-slate-300 md:text-lg">
-              Get Me A Chai is a creator support platform where audiences can
+              Get Me A Tea is a creator support platform where audiences can
               contribute directly and leave encouraging messages. It is built
               for artists, developers, educators, writers, and independent
               builders who want a cleaner way to accept support online.

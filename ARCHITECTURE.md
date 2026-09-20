@@ -2,7 +2,7 @@
 
 ## Overview
 
-Get Me A Chai is built with a modern, scalable architecture that emphasizes type safety, security, and performance. This document outlines the key architectural decisions and design patterns used.
+Get Me A Tea is built with a modern, scalable architecture that emphasizes type safety, security, and performance. This document outlines the key architectural decisions and design patterns used.
 
 ## System Architecture
 

@@ -7,9 +7,9 @@ import SessionWrapper from "@/components/SessionWrapper";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Get Me A Chai ☕ — Support Your Favourite Creators",
+  title: "Get Me A Tea ☕ — Support Your Favourite Creators",
   description:
-    "Get Me A Chai is a creator monetization platform where fans can buy a chai (make a small donation) to support their favourite creators. Creators get a personal page, Razorpay-powered payments, and a dashboard to track earnings and supporters.",
+    "Get Me A Tea is a creator monetization platform where fans can buy a tea (make a small donation) to support their favourite creators. Creators get a personal page, Razorpay-powered payments, and a dashboard to track earnings and supporters.",
 };
 
 

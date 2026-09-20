@@ -93,7 +93,7 @@ const PaymentPage = ({ username }) => {
     }
 
     const options = {
-      key: currentUser?.razorpayId,
+      key: order.keyId || process.env.NEXT_PUBLIC_KEY_ID || currentUser?.razorpayId,
       amount: order.amount,
       currency: "INR",
       name: currentUser?.name || `@${currentUser?.username}`,

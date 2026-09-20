@@ -4,7 +4,6 @@ import Payment from "@/app/models/Payment";
 import connectDb from "@/app/db/connectDb";
 import User from "@/app/models/User";
 import type { IPayment } from "@/app/models/Payment";
-import { decryptTextSafe } from "@/lib/crypto";
 
 /**
  * POST /api/razorpay
@@ -39,23 +38,15 @@ export const POST = async (request: NextRequest) => {
       );
     }
 
-    // Get user and verify Razorpay secret
-    const user = await User.findOne({ username: payment.toUsername })
-      .select("+razorpaySecret")
-      .lean();
-
-    const rawSecret = user?.razorpaySecret;
-    if (!rawSecret) {
-      console.error("User Razorpay secret missing:", {
-        username: payment.toUsername,
-      });
+    // Verify payment using platform Razorpay secret
+    const razorpaySecret = process.env.KEY_SECRET?.trim();
+    if (!razorpaySecret) {
+      console.error("Platform KEY_SECRET missing in environment variables");
       return NextResponse.json(
-        { success: false, error: "Payment verification failed" },
-        { status: 400 }
+        { success: false, error: "Payment verification failed: Gateway misconfigured" },
+        { status: 500 }
       );
     }
-
-    const razorpaySecret = decryptTextSafe(rawSecret).trim();
 
     // Verify payment signature
     const isVerified = validatePaymentVerification(
@@ -72,7 +63,7 @@ export const POST = async (request: NextRequest) => {
       await Payment.findOneAndUpdate(
         { orderId: razorpay_order_id },
         { status: "failed", paymentId: razorpay_payment_id },
-        { returnDocument: 'after' }
+        { returnDocument: "after" }
       );
 
       console.warn("Payment verification failed:", {
@@ -93,7 +84,7 @@ export const POST = async (request: NextRequest) => {
         status: "completed",
         paymentId: razorpay_payment_id,
       },
-      { returnDocument: 'after' }
+      { returnDocument: "after" }
     );
 
     // Update user's total donations
@@ -108,8 +99,15 @@ export const POST = async (request: NextRequest) => {
     });
 
     // Redirect to creator's page with success parameter
+    const creatorUsername = updatedPayment?.toUsername || payment.toUsername;
+    if (!creatorUsername) {
+      return NextResponse.json(
+        { success: false, error: "Could not determine redirect destination" },
+        { status: 500 }
+      );
+    }
     const redirectUrl = new URL(
-      `/${updatedPayment?.toUsername}?paymentSuccess=true`,
+      `/${creatorUsername}?paymentSuccess=true`,
       request.url
     );
     return NextResponse.redirect(redirectUrl);

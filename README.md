@@ -1,6 +1,6 @@
-# Get Me A Chai ☕
+# Get Me A Tea ☕
 
-**Get Me A Chai** is a full-stack creator monetization platform where fans and supporters can buy a "chai" (a small donation) for their favourite creators. Built with **Next.js 16**, **TypeScript**, **MongoDB**, and **Razorpay**, it provides a seamless, secure experience for both creators and their supporters.
+**Get Me A Tea** is a full-stack creator monetization platform where fans and supporters can buy a "tea" (a small donation) for their favourite creators. Built with **Next.js 16**, **TypeScript**, **MongoDB**, and **Razorpay**, it provides a seamless, secure experience for both creators and their supporters.
 
 ---
 
@@ -110,8 +110,8 @@
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/yourusername/get-me-a-chai.git
-cd get-me-a-chai
+git clone https://github.com/yourusername/get-me-a-tea.git
+cd get-me-a-tea
 
 # 2. Install dependencies
 npm install

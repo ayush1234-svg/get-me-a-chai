@@ -1,6 +1,6 @@
 # Development Guide
 
-Quick reference for developers working on Get Me A Chai.
+Quick reference for developers working on Get Me A Tea.
 
 ## Quick Start
 
