@@ -40,6 +40,40 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
+  const [imageError, setImageError] = useState("");
+
+  const handleImageUpload = (event, field, maxWidth) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setImageError("Please choose an image file.");
+      return;
+    }
+
+    const image = new Image();
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      image.onload = () => {
+        const scale = Math.min(1, maxWidth / image.width);
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(image.width * scale);
+        canvas.height = Math.round(image.height * scale);
+        canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+
+        setForm((prev) => ({
+          ...prev,
+          [field]: canvas.toDataURL("image/jpeg", 0.8),
+        }));
+        setImageError("");
+      };
+      image.src = reader.result;
+    };
+
+    reader.readAsDataURL(file);
+    event.target.value = "";
+  };
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -208,6 +242,7 @@ const Dashboard = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
+              {imageError && <p className="rounded-lg border border-red-900 bg-red-950/40 px-3 py-2 text-sm text-red-300">{imageError}</p>}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1.5">Profile Picture URL</label>
@@ -219,6 +254,16 @@ const Dashboard = () => {
                     placeholder="https://example.com/photo.jpg"
                     className="w-full px-3.5 py-2.5 bg-gray-950 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition"
                   />
+                  <label className="mt-2 block text-xs text-gray-400">Or choose from your device</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(event) => handleImageUpload(event, "profilePicture", 600)}
+                    className="mt-1 block w-full text-xs text-gray-400 file:mr-3 file:rounded-md file:border-0 file:bg-blue-600 file:px-3 file:py-2 file:text-xs file:font-medium file:text-white hover:file:bg-blue-700"
+                  />
+                  {form.profilePicture?.startsWith("data:image") && (
+                    <img src={form.profilePicture} alt="Profile preview" className="mt-3 h-16 w-16 rounded-full object-cover" />
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1.5">Cover Image URL</label>
@@ -230,6 +275,16 @@ const Dashboard = () => {
                     placeholder="https://example.com/cover.jpg"
                     className="w-full px-3.5 py-2.5 bg-gray-950 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition"
                   />
+                  <label className="mt-2 block text-xs text-gray-400">Or choose from your device</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(event) => handleImageUpload(event, "coverImage", 1600)}
+                    className="mt-1 block w-full text-xs text-gray-400 file:mr-3 file:rounded-md file:border-0 file:bg-blue-600 file:px-3 file:py-2 file:text-xs file:font-medium file:text-white hover:file:bg-blue-700"
+                  />
+                  {form.coverImage?.startsWith("data:image") && (
+                    <img src={form.coverImage} alt="Cover preview" className="mt-3 h-16 w-full rounded-lg object-cover" />
+                  )}
                 </div>
               </div>
 
