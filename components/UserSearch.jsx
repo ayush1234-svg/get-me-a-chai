@@ -101,13 +101,13 @@ const UserSearch = () => {
       </form>
 
       {showDropdown && query.trim().length >= 2 && (
-        <div className="absolute z-20 mt-1 w-full rounded-xl border border-gray-700 bg-gray-800 shadow-lg overflow-hidden">
+        <div className="absolute left-0 right-0 z-20 mt-2 overflow-hidden rounded-2xl border border-gray-700 bg-gray-800 p-1.5 shadow-xl sm:left-auto sm:right-0 sm:w-[22rem]">
           {loading && (
-            <p className="px-4 py-3 text-sm text-gray-400">Searching...</p>
+            <p className="px-3 py-2 text-sm text-gray-400">Searching...</p>
           )}
 
           {!loading && results.length === 0 && (
-            <p className="px-4 py-3 text-sm text-gray-400">No creators found</p>
+            <p className="px-3 py-2 text-sm text-gray-400">No creators found</p>
           )}
 
           {!loading &&
@@ -116,19 +116,19 @@ const UserSearch = () => {
                 key={`${user.username}-${index}`}
                 type="button"
                 onClick={() => goToUser(user.username)}
-                className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-gray-700 transition-colors"
+                className="flex w-full items-center gap-2 rounded-xl px-2.5 py-2 text-left transition-colors hover:bg-gray-700"
               >
                 <img
                   src={user.profilePicture || "/avatar.gif"}
                   alt=""
                   width={36}
                   height={36}
-                  className="rounded-full object-cover"
+                  className="h-8 w-8 shrink-0 rounded-full object-cover"
                 />
-                <div>
-                  <p className="text-sm font-medium text-white">@{user.username}</p>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium text-white">@{user.username}</p>
                   {user.name && (
-                    <p className="text-xs text-gray-400">{user.name}</p>
+                    <p className="truncate text-xs text-gray-400">{user.name}</p>
                   )}
                 </div>
               </button>
