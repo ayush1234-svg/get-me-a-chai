@@ -144,19 +144,19 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-10 max-w-4xl">
+    <div className="container mx-auto max-w-4xl px-3 py-6 sm:px-4 sm:py-10">
       <ToastContainer position="top-right" autoClose={3000} />
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-gray-800">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-white">Dashboard</h1>
-          <p className="text-sm text-gray-400 mt-1">Manage your creator profile and track your tea support.</p>
+          <p className="mt-1 text-xs text-gray-400 sm:text-sm">Manage your creator profile and track your tea support.</p>
         </div>
         <div className="flex items-center gap-3">
           <Link
             href={`/${form.username}`}
-            className="px-4 py-2 text-sm font-medium text-gray-200 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition"
+            className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-xs font-medium text-gray-200 transition hover:bg-gray-700 sm:px-4 sm:text-sm"
           >
             View Public Page
           </Link>
@@ -164,10 +164,10 @@ const Dashboard = () => {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex gap-2 border-b border-gray-800 mt-6">
+      <div className="mt-6 flex gap-1 overflow-x-auto border-b border-gray-800 sm:gap-2">
         <button
           onClick={() => setActiveTab("profile")}
-          className={`pb-3 px-3 text-sm font-medium transition border-b-2 ${
+          className={`shrink-0 pb-3 px-2 text-sm font-medium transition border-b-2 sm:px-3 ${
             activeTab === "profile"
               ? "border-blue-500 text-white font-semibold"
               : "border-transparent text-gray-400 hover:text-gray-200"
@@ -177,7 +177,7 @@ const Dashboard = () => {
         </button>
         <button
           onClick={() => setActiveTab("stats")}
-          className={`pb-3 px-3 text-sm font-medium transition border-b-2 ${
+          className={`shrink-0 pb-3 px-2 text-sm font-medium transition border-b-2 sm:px-3 ${
             activeTab === "stats"
               ? "border-blue-500 text-white font-semibold"
               : "border-transparent text-gray-400 hover:text-gray-200"
@@ -187,7 +187,7 @@ const Dashboard = () => {
         </button>
         <button
           onClick={() => setActiveTab("payments")}
-          className={`pb-3 px-3 text-sm font-medium transition border-b-2 ${
+          className={`shrink-0 pb-3 px-2 text-sm font-medium transition border-b-2 sm:px-3 ${
             activeTab === "payments"
               ? "border-blue-500 text-white font-semibold"
               : "border-transparent text-gray-400 hover:text-gray-200"
@@ -198,10 +198,10 @@ const Dashboard = () => {
       </div>
 
       {/* Main Content */}
-      <div className="mt-8">
+      <div className="mt-6 sm:mt-8">
         {/* Profile Tab */}
         {activeTab === "profile" && (
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 sm:p-8">
+          <div className="rounded-xl border border-gray-800 bg-gray-900 p-4 sm:p-8">
             <div className="mb-6">
               <h2 className="text-lg font-semibold text-white">Profile Details</h2>
               <p className="text-sm text-gray-400">Update your public profile information and images.</p>
@@ -306,29 +306,29 @@ const Dashboard = () => {
         {/* Statistics Tab */}
         {activeTab === "stats" && (
           <div className="space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
+              <div className="rounded-xl border border-gray-800 bg-gray-900 p-4 sm:p-6">
                 <p className="text-xs font-medium uppercase tracking-wider text-gray-400">Total Raised</p>
-                <p className="text-3xl font-bold text-white mt-2">₹{stats.totalAmount.toLocaleString()}</p>
+                <p className="mt-2 text-2xl font-bold text-white sm:text-3xl">₹{stats.totalAmount.toLocaleString()}</p>
                 <p className="text-xs text-gray-500 mt-1">
                   From {stats.totalDonations} contribution{stats.totalDonations !== 1 ? "s" : ""}
                 </p>
               </div>
 
-              <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+              <div className="rounded-xl border border-gray-800 bg-gray-900 p-4 sm:p-6">
                 <p className="text-xs font-medium uppercase tracking-wider text-gray-400">Average Support</p>
-                <p className="text-3xl font-bold text-white mt-2">₹{stats.averageDonation.toLocaleString()}</p>
+                <p className="mt-2 text-2xl font-bold text-white sm:text-3xl">₹{stats.averageDonation.toLocaleString()}</p>
                 <p className="text-xs text-gray-500 mt-1">Per supporter</p>
               </div>
 
-              <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+              <div className="rounded-xl border border-gray-800 bg-gray-900 p-4 sm:p-6">
                 <p className="text-xs font-medium uppercase tracking-wider text-gray-400">Top Donation</p>
-                <p className="text-3xl font-bold text-white mt-2">₹{stats.maxDonation.toLocaleString()}</p>
+                <p className="mt-2 text-2xl font-bold text-white sm:text-3xl">₹{stats.maxDonation.toLocaleString()}</p>
                 <p className="text-xs text-gray-500 mt-1">Single donation</p>
               </div>
             </div>
 
-            <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex flex-col justify-between gap-3 rounded-xl border border-gray-800 bg-gray-900 p-4 sm:flex-row sm:items-center sm:gap-4 sm:p-6">
               <div>
                 <p className="text-sm font-medium text-white">Your Public Page URL</p>
                 <p className="text-xs text-gray-400 mt-0.5">Share this link with your audience to receive support.</p>

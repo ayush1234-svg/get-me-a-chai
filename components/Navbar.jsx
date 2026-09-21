@@ -10,17 +10,17 @@ const Navbar = () => {
 
 
   return (
-    <div className='bg-gray-900 text-white flex justify-between px-4 h-14 items-center gap-2'>
+    <div className='bg-gray-900 text-white flex min-h-14 flex-wrap items-center justify-between gap-2 px-3 py-2 sm:flex-nowrap sm:px-4 sm:py-0'>
       <Link href={"/"} className="logo flex shrink-0 items-center justify-center gap-2">
-        <img src="/tea.gif" alt="Tea Logo" width={45} />
+        <img src="/tea.gif" alt="Tea Logo" width={45} className="h-8 w-8 object-contain sm:h-10 sm:w-10" />
         <span className='font-semibold hidden sm:inline'>Get Me A Tea</span>
       </Link>
 
       <UserSearch />
 
-      <div className="flex shrink-0 items-center gap-2 relative">
-        {session && <><button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" onClick={() => setShowdropdown(!Showdropdown)} className="inline-flex mx-3 rounded-xl items-center justify-center text-white bg-blue-700 border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 shadow-sm font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none" type="button">
-          Welcome {session.user.email}
+      <div className="relative flex shrink-0 items-center gap-1 sm:gap-2">
+        {session && <><button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" onClick={() => setShowdropdown(!Showdropdown)} className="inline-flex items-center justify-center rounded-xl border border-blue-700 bg-blue-700 px-2 py-1.5 text-sm font-medium leading-5 text-white shadow-sm hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:px-4 sm:py-2.5" type="button">
+          <span className="hidden max-w-28 truncate min-[401px]:inline sm:max-w-48">Welcome {session.user.email}</span>
 
           <svg className="w-4 h-4 ms-1.5 -me-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 9-7 7-7-7" />
@@ -54,7 +54,7 @@ const Navbar = () => {
           <button
             type="button"
             onClick={() => signOut({ callbackUrl: "/" })}
-            className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-xl text-sm px-6 py-3 text-center leading-5"
+            className="rounded-xl bg-gradient-to-br from-purple-600 to-blue-500 px-2 py-1.5 text-sm font-medium leading-5 text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-blue-300 sm:px-6 sm:py-3"
           >
             Log out
           </button>
@@ -70,7 +70,7 @@ const Navbar = () => {
 
 
 
-              className="text-white  bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-base rounded-xl text-sm px-6 py-2 text-center leading-5"
+              className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-base rounded-xl text-sm px-4 py-2 text-center leading-5 sm:px-6"
             >
               Login
             </button>

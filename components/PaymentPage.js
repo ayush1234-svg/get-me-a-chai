@@ -132,26 +132,26 @@ const PaymentPage = ({ username }) => {
 
       <div className="relative">
         <img
-          className="w-full object-cover h-[320px]"
+          className="h-52 w-full object-cover sm:h-64 md:h-80"
           src={currentUser?.coverImage || "/default-cover.jpg"}
           alt="Cover image"
         />
         <img
-          className="absolute h-28 w-28 bottom-[-36px] right-10 rounded-full border-4 border-white bg-slate-900"
+          className="absolute bottom-[-28px] right-5 h-20 w-20 rounded-full border-4 border-white bg-slate-900 sm:bottom-[-36px] sm:right-10 sm:h-28 sm:w-28"
           src={currentUser?.profilePicture || "/default-avatar.jpg"}
           alt="Creator"
         />
       </div>
 
-      <div className="container mx-auto px-4 py-10 text-white">
-        <div className="rounded-3xl bg-slate-950/95 border border-slate-800 p-8 shadow-xl backdrop-blur-sm">
+      <div className="container mx-auto px-4 py-12 text-white sm:px-6 md:py-10">
+        <div className="rounded-2xl border border-slate-800 bg-slate-950/95 p-4 shadow-xl backdrop-blur-sm sm:rounded-3xl sm:p-8">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <p className="text-sm uppercase tracking-[0.3em] text-indigo-300">Support a creator</p>
-              <h1 className="mt-3 text-4xl font-bold">@{currentUser.username}</h1>
+              <h1 className="mt-3 break-words text-3xl font-bold sm:text-4xl">@{currentUser.username}</h1>
               {currentUser.bio && <p className="mt-4 max-w-2xl text-slate-300">{currentUser.bio}</p>}
             </div>
-            <div className="rounded-3xl bg-slate-900 border border-slate-700 p-5 text-center">
+            <div className="rounded-2xl border border-slate-700 bg-slate-900 p-5 text-center sm:rounded-3xl">
               <p className="text-sm text-slate-400">Raised so far</p>
               <p className="text-3xl font-bold text-white">₹{totalRaised.toLocaleString()}</p>
               <p className="mt-2 text-sm text-slate-400">{payments.length} donation{payments.length !== 1 ? "s" : ""}</p>
@@ -159,7 +159,7 @@ const PaymentPage = ({ username }) => {
           </div>
 
           <div className="mt-10 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-            <div className="rounded-3xl bg-slate-900 border border-slate-700 p-6">
+            <div className="rounded-2xl border border-slate-700 bg-slate-900 p-4 sm:rounded-3xl sm:p-6">
               <h2 className="text-2xl font-semibold mb-4">Recent support</h2>
               {payments.length === 0 ? (
                 <p className="text-slate-400">No donations yet. Be the first to support!</p>
@@ -178,7 +178,7 @@ const PaymentPage = ({ username }) => {
               )}
             </div>
 
-            <div className="rounded-3xl bg-slate-900 border border-slate-700 p-6">
+            <div className="rounded-2xl border border-slate-700 bg-slate-900 p-4 sm:rounded-3xl sm:p-6">
               <h2 className="text-2xl font-semibold mb-4">Donate now</h2>
               {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
               <label className="block text-sm text-slate-400 mb-2">Your name</label>

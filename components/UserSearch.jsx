@@ -79,7 +79,7 @@ const UserSearch = () => {
   }
 
   return (
-    <div ref={containerRef} className="relative flex-1 max-w-md mx-4">
+    <div ref={containerRef} className="relative order-last min-w-0 w-full basis-full max-w-md flex-1 sm:order-none sm:basis-auto sm:mx-2 md:mx-4">
       <form onSubmit={handleSubmit} className="relative">
         <input
           type="text"
